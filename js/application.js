@@ -10,8 +10,6 @@ function updateTasks () {
             <button class="destroy"></button>\
             </div>\
             </li>');
-    });
-    $(tasks).each(function () {
         if ($('#todo-list li').hasClass('completed')) {
             $('#clear-completed').show();
         }
@@ -19,10 +17,10 @@ function updateTasks () {
             $('#clear-completed').hide();
         }
     });
-    tasksCount();
+    ShowTasksCounter();
 }
 
-function tasksCount () {
+function ShowTasksCounter() {
     $('.count').text(tasks.length);
     if (tasks.length < 1) {
         $('#footer').hide();
