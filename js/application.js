@@ -1,5 +1,4 @@
 var tasks = [];
-var i = 0;
 
 function updateTasks () {
     $('#todo-list').find('li').remove();
@@ -10,8 +9,6 @@ function updateTasks () {
             <button class="destroy"></button>\
             </div>\
             </li>');
-    });
-    $(tasks).each(function () {
         if ($('#todo-list li').hasClass('completed')) {
             $('#clear-completed').show();
         }
@@ -32,13 +29,17 @@ function tasksCount () {
 /* Добавление задач */
 
 $('#new-todo').keyup(function (e) {
+    const newId = GetNewUserId();
     if ((e.keyCode === 13)) {
         if ($(this).val() !== '') {
             $('#main').show();
             $('#footer').show();
             var $this = $(this);
             var newTask = $this.val();
-            tasks.push({id: i++, title: newTask, status: 'active'});
+            tasks.push({
+                id: newId,
+                title: newTask,
+                status: 'active'});
             updateTasks();
             // Очистка Input
             $('#new-todo').val('');
@@ -49,15 +50,22 @@ $('#new-todo').keyup(function (e) {
     }
 });
 
+function GetNewUserId () {
+    if (tasks.id === 0) {
+        tasks.id = 1;
+    }
+    var maxId = tasks.reduce((max, item) => item.id > max ? item.id : max, 0);
+    return maxId + 1;
+}
+
 /* Checkbox */
 
 $('#todo-list').on('click', '.toggle', function (e) {
-    var id = parseInt(e.target.dataset.id);
+    var id = parseInt(e.target.dataset.id + 1);
     tasks[id].status = "completed";
     if (!$(this).prop("checked")) {
         tasks[id].status = "active";
     }
-
     updateTasks();
 });
 
@@ -103,6 +111,7 @@ $('.show-completed-tasks').on('click', function() {
 $('#todo-list').on('click', 'button.destroy', function (e) {
     var id = parseInt(e.target.dataset.id);
     tasks.splice(id, 1);
+    console.log(id);
     updateTasks();
 });
 
