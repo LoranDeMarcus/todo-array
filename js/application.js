@@ -7,7 +7,7 @@ function updateTasks () {
         $('#todo-list').append('<li class="' + t.status + '">\
             <div class="todo-task">\
             <input class="toggle" type="checkbox" data-id="' + t.id + '" ' + (t.status === 'completed' ? ' checked ' : '' ) + '><label class="text">' + t.title + '</label>\
-            <button class="destroy" data-id="' + t.id + '"></button>\
+            <button class="destroy"></button>\
             </div>\
             </li>');
     });
@@ -72,7 +72,7 @@ $('#toggle-all').on('click', function () {
     updateTasks();
 });
 
-/* Отображение задач */
+
 
 $('.show-all-tasks').on('click', function() {
     $('li.active').show();
@@ -114,7 +114,7 @@ function ShowTasks () {
 
 /* События кнопки Clear Completed */
 
-$('#clear-completed').on('click', function (i) {
+$('#clear-completed').on('click', function () {
     $('input:checked').parents('li').remove();
     $(tasks).each(function (i) {
         if (tasks[i].status === "completed") {
