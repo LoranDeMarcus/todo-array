@@ -1,19 +1,37 @@
-describe("TestingAddTaskWithoutArguments", function () {
+describe("TestingAddTask", function () {
 
     it("CallWithoutArgumentsMustReturnFalse", function () {
         assert.equal(tasks.push(), false);
     });
 
-});
-
-describe("TestingDeleteTasks", function () {
-    it("IfArrayEmptyMustReturnTrue", function () {
+    it("CallWithArgumentsMustReturnTrue", function () {
         tasks.push({
             id: i++,
             title: "testTask",
             status: 'active'
         });
-        tasks.splice(1, 1);
-        assert.equal(tasks);
+        assert.equal(tasks.length === 1, true);
     });
+
+});
+
+describe("TestingTasksByTogglingStatus", function () {
+
+    it("ToggleTaskStatusToCompletedMustReturnTrue", function () {
+        const prevValue = tasks[0].status;
+        tasks[0].status = "completed";
+        const currentValue = tasks[0].status;
+        assert.notEqual(prevValue, currentValue);
+    });
+
+});
+
+describe("TestingTasksByDeletingObj", function () {
+
+    it("IfArrayEmptyMustReturnTrue", function () {
+
+        tasks.splice(0, 1);
+        assert.equal(tasks.length === 0, true);
+    });
+
 });
