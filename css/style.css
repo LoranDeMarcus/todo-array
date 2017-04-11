@@ -281,7 +281,7 @@ li {
     text-align: -webkit-match-parent;
 }
 
-#filters li a.active{
+#filters li a.activated {
     border-color: rgba(175, 47, 47, 0.2);
 }
 

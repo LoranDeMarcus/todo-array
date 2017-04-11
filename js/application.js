@@ -1,22 +1,26 @@
 var tasks = [];
 var i = 0;
 
-function updateTasks() {
+function updateTasks () {
     $('#todo-list').find('li').remove();
-    $(tasks).each(function(i,t) {
-
-        $('#todo-list').append('<li class="'+ t.status +'">\
+    $(tasks).each(function (i, t) {
+        $('#todo-list').append('<li class="' + t.status + '">\
             <div class="todo-task">\
-            <input class="toggle" type="checkbox" data-id="'+ t.id +'" '+ (t.status === 'completed' ? ' checked ' : '' ) +'><label class="text">'+ t.title +'</label>\
-            <button class="destroy" data-id="'+ t.id +'"></button>\
+            <input class="toggle" type="checkbox" data-id="' + t.id + '" ' + (t.status === 'completed' ? ' checked ' : '' ) + '><label class="text">' + t.title + '</label>\
+            <button class="destroy" data-id="' + t.id + '"></button>\
             </div>\
             </li>');
     });
-
+    if ($('li.completed')) {
+        $('#clear-completed').show();
+    }
+    if (!$('li.complete').hasClass('checked')) {
+        $('#clear-completed').hide();
+    };
     tasksCount();
 }
 
-function tasksCount() {
+function tasksCount () {
     $('.count').text(tasks.length);
     if (tasks.length < 1) {
         $('#footer').hide();
@@ -25,8 +29,8 @@ function tasksCount() {
 
 /* Добавление задач */
 
-$('#new-todo').keyup(function (event) {
-    if ((event.keyCode === 13)) {
+$('#new-todo').keyup(function (e) {
+    if ((e.keyCode === 13)) {
         if ($(this).val() !== '') {
             $('#main').show();
             $('#footer').show();
@@ -36,7 +40,8 @@ $('#new-todo').keyup(function (event) {
             updateTasks();
             // Очистка Input
             $('#new-todo').val('');
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -53,6 +58,44 @@ $('#todo-list').on('click', '.toggle', function (e) {
     updateTasks();
 });
 
+$('#toggle-all').on('click', function () {
+    $(tasks).each(function (i) {
+        if ($('#toggle-all').prop("checked")) {
+            tasks[i].status = "completed";
+        } else {
+            tasks[i].status = "active";
+        }
+    });
+    updateTasks();
+});
+
+/* Отображение задач */
+
+$('.show-all-tasks').on('click', function() {
+    var $this = ($('li.active') && $('li.completed'));
+    $this.each(function () {
+        $this.show();
+    });
+    $(this).toggleClass('activated');
+    $('.show-active-tasks').removeClass('activated');
+    $('.show-completed-tasks').removeClass('activated');
+});
+
+$('.show-active-tasks').on('click', function() {
+    $('li.active').show();
+    $('li.completed').hide();
+    $(this).toggleClass('activated');
+    $('.show-all-tasks').removeClass('activated');
+    $('.show-completed-tasks').removeClass('activated');
+});
+
+$('.show-completed-tasks').on('click', function() {
+    $('li.active').hide();
+    $('li.completed').show();
+    $(this).toggleClass('activated');
+    $('.show-all-tasks').removeClass('activated');
+    $('.show-active-tasks').removeClass('activated');
+});
 
 /* Удаление */
 
@@ -62,30 +105,37 @@ $('#todo-list').on('click', 'button.destroy', function (e) {
     updateTasks();
 });
 
-
-function ShowTasks() {
+function ShowTasks () {
     tasks.forEach(function (item, i, tasks) {
         console.log(tasks[i].id, tasks[i].title, tasks[i].status);
     });
 }
-/*
-Checkbox
 
-$('#todo-list').on('click', '.toggle', function() {
-    $(this).parents('li').toggleClass('checked');
-    if( $('#todo-list .toggle:checked').length == $('#todo-list .toggle').length ){
-        $('#toggle-all').prop('checked', true);
-    } else {
-    $('#toggle-all').prop('checked', false);
-    }
-    if ($('li.complete').hasClass('checked')) {
-        $('#clear-completed').show();
-    }
-    if (!$('li.complete').hasClass('checked')) {
-        $('#clear-completed').hide();
-    };
+/* События кнопки Clear Completed */
+
+$('#clear-completed').on('click', function () {
+    $('input:checked').parents('li').remove();
     tasksCount();
 });
+
+/*
+ Checkbox
+
+ $('#todo-list').on('click', '.toggle', function() {
+ $(this).parents('li').toggleClass('checked');
+ if( $('#todo-list .toggle:checked').length == $('#todo-list .toggle').length ){
+ $('#toggle-all').prop('checked', true);
+ } else {
+ $('#toggle-all').prop('checked', false);
+ }
+ if ($('li.complete').hasClass('checked')) {
+ $('#clear-completed').show();
+ }
+ if (!$('li.complete').hasClass('checked')) {
+ $('#clear-completed').hide();
+ };
+ tasksCount();
+ });
 
  $('#toggle-all').on('click', function () {
  if ($('#todo-list .toggle:checked').length == $('#todo-list .toggle').length) {
@@ -106,34 +156,34 @@ $('#todo-list').on('click', '.toggle', function() {
 
  События отображения задач
 
-$('.show-all-tasks').on('click', function() {
-    $('li.complete').each(function () {
-    $(this).show();
-    });
-    $(this).toggleClass('active');
-    $('.show-active-tasks').removeClass('active');
-    $('.show-completed-tasks').removeClass('active');
-    });
-    $('.show-active-tasks').on('click', function() {
-    $('input:not(:checked)').parents('li').show();
-    $('input:checked').parents('li').hide();
-    $(this).toggleClass('active');
-    $('.show-all-tasks').removeClass('active');
-    $('.show-completed-tasks').removeClass('active');
-});
+ $('.show-all-tasks').on('click', function() {
+ $('li.complete').each(function () {
+ $(this).show();
+ });
+ $(this).toggleClass('active');
+ $('.show-active-tasks').removeClass('active');
+ $('.show-completed-tasks').removeClass('active');
+ });
+ $('.show-active-tasks').on('click', function() {
+ $('input:not(:checked)').parents('li').show();
+ $('input:checked').parents('li').hide();
+ $(this).toggleClass('active');
+ $('.show-all-tasks').removeClass('active');
+ $('.show-completed-tasks').removeClass('active');
+ });
 
-$('.show-completed-tasks').on('click', function() {
-    $('input:not(:checked)').parents('li').hide();
-    $('input:checked').parents('li').show();
-    $(this).toggleClass('active');
-    $('.show-all-tasks').removeClass('active');
-    $('.show-active-tasks').removeClass('active');
-});
+ $('.show-completed-tasks').on('click', function() {
+ $('input:not(:checked)').parents('li').hide();
+ $('input:checked').parents('li').show();
+ $(this).toggleClass('active');
+ $('.show-all-tasks').removeClass('active');
+ $('.show-active-tasks').removeClass('active');
+ });
 
-События кнопки Clear Completed
+ События кнопки Clear Completed
 
-$('#clear-completed').on('click', function () {
-$('input:checked').parents('li').remove();
-tasksCount();
-});
-*/
+ $('#clear-completed').on('click', function () {
+ $('input:checked').parents('li').remove();
+ tasksCount();
+ });
+ */
