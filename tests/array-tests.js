@@ -6,7 +6,7 @@ describe("TestingAddTask", function () {
 
     it("CallWithArgumentsMustReturnTrue", function () {
         tasks.push({
-            id: i++,
+            id: 1,
             title: "testTask",
             status: 'active'
         });
