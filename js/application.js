@@ -129,8 +129,8 @@ function ShowTasks () {
 
 $('#clear-completed').on('click', function () {
     $('input:checked').parents('li').remove(); $(tasks).each(function (i,r) {
-    if (r.status === "completed") {
-        tasks.splice(tasks.indexOf(r), 1); }
+        if (r.status === "completed") {
+            tasks.splice(tasks.indexOf(r), 1); }
     });
     UpdateTasks();
 });
